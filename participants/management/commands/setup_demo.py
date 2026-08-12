@@ -6,10 +6,11 @@ class Command(BaseCommand):
     help = 'Sets up initial demo staff account and sample participants for testing.'
 
     def handle(self, *args, **options):
+        
         # Create default staff user
-        admin_user, created = User.objects.get_or_create(username='admin')
+        admin_user, created = User.objects.get_or_create(username='anshrajpoot')
         if created:
-            admin_user.set_password('admin123')
+            admin_user.set_password('Ansh@123')
             admin_user.is_staff = True
             admin_user.is_superuser = True
             admin_user.save()
