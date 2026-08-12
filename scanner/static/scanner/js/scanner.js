@@ -124,6 +124,7 @@ document.addEventListener('DOMContentLoaded', () => {
       startBtn.classList.add('d-none');
       stopBtn.classList.remove('d-none');
       document.getElementById('scannerPlaceholder')?.classList.add('d-none');
+      document.getElementById('scannerOverlay')?.classList.remove('d-none');
     }).catch((err) => {
       console.error("Scanner start error:", err);
       showErrorUI("Failed to start camera feed. Please select a different camera or check permissions.");
@@ -137,6 +138,7 @@ document.addEventListener('DOMContentLoaded', () => {
         html5Qrcode.clear();
         startBtn.classList.remove('d-none');
         stopBtn.classList.add('d-none');
+        document.getElementById('scannerOverlay')?.classList.add('d-none');
       }).catch(err => console.error("Scanner stop error:", err));
     }
   }
