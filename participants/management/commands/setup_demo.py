@@ -16,7 +16,7 @@ class Command(BaseCommand):
             admin_user.save()
             self.stdout.write(self.style.SUCCESS("Created staff account: username='admin', password='admin123'"))
         else:
-            self.stdout.write(self.style.WARNING("Staff account 'admin' already exists."))
+            self.stdout.write(self.style.WARNING("Staff account 'anshrajpoot' already exists."))
 
         # Create sample participants
         sample_data = [
