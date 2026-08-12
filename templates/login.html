@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block title %}Staff Login - TechPass{% endblock %}
+
+{% block content %}
+<div class="page-banner">
+    <div class="container">
+        <h1><i class="bi bi-shield-lock me-2"></i>Staff Portal Login</h1>
+        <p>Access the QR Scanner camera tool and live Event Check-In Dashboard.</p>
+    </div>
+</div>
+
+<div class="container main-content">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5">
+            <div class="custom-card p-4 p-md-5">
+                <div class="text-center mb-4">
+                    <div class="d-inline-flex align-items-center justify-content-center bg-primary-subtle text-primary rounded-circle mb-3" style="width: 60px; height: 60px; font-size: 1.75rem;">
+                        <i class="bi bi-person-badge"></i>
+                    </div>
+                    <h3 class="fw-bold">Sign In</h3>
+                    <p class="text-muted small">Authorized event coordinators only</p>
+                </div>
+
+                <form method="post" action="{% url 'login' %}{% if request.GET.next %}?next={{ request.GET.next }}{% endif %}">
+                    {% csrf_token %}
+                    
+                    <div class="mb-3">
+                        <label class="form-label" for="id_username">Username</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light"><i class="bi bi-person"></i></span>
+                            <input type="text" name="username" class="form-control" id="id_username" placeholder="Enter staff username" required autofocus>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label" for="id_password">Password</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light"><i class="bi bi-lock"></i></span>
+                            <input type="password" name="password" class="form-control" id="id_password" placeholder="Enter password" required>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary-custom w-100 py-2.5 fs-6">
+                        <i class="bi bi-box-arrow-in-right me-1"></i> Log In to Staff Area
+                    </button>
+                </form>
+
+                <div class="mt-4 text-center">
+                    <p class="text-muted small mb-0">
+                        Default Admin: Create superuser via <code>python manage.py createsuperuser</code>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

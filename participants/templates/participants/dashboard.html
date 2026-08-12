@@ -1,0 +1,158 @@
+{% extends 'base.html' %}
+
+{% block title %}Admin Attendance Dashboard - TechPass{% endblock %}
+
+{% block content %}
+<div class="page-banner">
+    <div class="container">
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-3">
+            <div class="text-center text-md-start">
+                <h1><i class="bi bi-speedometer2 me-2"></i>Event Attendance Dashboard</h1>
+                <p class="mb-0">Real-time attendance stats, search, and participant status monitoring.</p>
+            </div>
+            <div>
+                <a href="{% url 'scanner_page' %}" class="btn btn-light text-primary fw-bold shadow-sm rounded-pill px-4 py-2">
+                    <i class="bi bi-camera-fill me-1"></i> Open QR Scanner
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container main-content">
+    <!-- Stats Cards Row -->
+    <div class="row g-3 mb-4">
+        <div class="col-md-4">
+            <div class="stat-card">
+                <div class="stat-icon total">
+                    <i class="bi bi-people-fill"></i>
+                </div>
+                <div>
+                    <div class="stat-value">{{ total_participants }}</div>
+                    <div class="stat-label">Total Registered</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="stat-card">
+                <div class="stat-icon attended">
+                    <i class="bi bi-check-circle-fill"></i>
+                </div>
+                <div>
+                    <div class="stat-value">{{ total_attended }} <span class="fs-6 text-success font-normal">({{ attendance_rate }}%)</span></div>
+                    <div class="stat-label">Checked In (Attended)</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="stat-card">
+                <div class="stat-icon pending">
+                    <i class="bi bi-clock-history"></i>
+                </div>
+                <div>
+                    <div class="stat-value">{{ total_not_attended }}</div>
+                    <div class="stat-label">Not Attended</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Table Card -->
+    <div class="custom-card">
+        <div class="card-header-custom flex-column flex-md-row gap-3">
+            <div class="d-flex align-items-center gap-2">
+                <i class="bi bi-table text-primary fs-5"></i>
+                <span>Participant List</span>
+            </div>
+
+            <!-- Search & Filter Controls -->
+            <form method="get" action="{% url 'dashboard' %}" class="d-flex flex-column flex-sm-row gap-2 w-100 w-md-auto">
+                <input type="hidden" name="status" value="{{ status_filter }}">
+                <div class="input-group">
+                    <span class="input-group-text bg-white border-end-0"><i class="bi bi-search text-muted"></i></span>
+                    <input type="text" name="q" value="{{ query }}" class="form-control border-start-0" placeholder="Search name, roll no, email..." aria-label="Search">
+                    {% if query %}
+                        <a href="{% url 'dashboard' %}?status={{ status_filter }}" class="btn btn-outline-secondary"><i class="bi bi-x"></i></a>
+                    {% endif %}
+                </div>
+                <button type="submit" class="btn btn-primary-custom px-3">Search</button>
+            </form>
+        </div>
+
+        <!-- Filter Pills -->
+        <div class="px-4 py-2 bg-light border-bottom d-flex gap-2">
+            <a href="{% url 'dashboard' %}?status=all{% if query %}&q={{ query }}{% endif %}" 
+               class="btn btn-sm {% if status_filter == 'all' %}btn-dark{% else %}btn-outline-secondary{% endif %} rounded-pill px-3">
+               All ({{ total_participants }})
+            </a>
+            <a href="{% url 'dashboard' %}?status=attended{% if query %}&q={{ query }}{% endif %}" 
+               class="btn btn-sm {% if status_filter == 'attended' %}btn-success{% else %}btn-outline-success{% endif %} rounded-pill px-3">
+               <i class="bi bi-check2"></i> Attended ({{ total_attended }})
+            </a>
+            <a href="{% url 'dashboard' %}?status=not_attended{% if query %}&q={{ query }}{% endif %}" 
+               class="btn btn-sm {% if status_filter == 'not_attended' %}btn-warning{% else %}btn-outline-warning{% endif %} rounded-pill px-3">
+               <i class="bi bi-hourglass"></i> Not Attended ({{ total_not_attended }})
+            </a>
+        </div>
+
+        <!-- Table View -->
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th class="ps-4">#</th>
+                        <th>Name</th>
+                        <th>Roll Number</th>
+                        <th>Email</th>
+                        <th>Status</th>
+                        <th>Check-in Time</th>
+                        <th class="pe-4 text-end">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for p in participants %}
+                    <tr>
+                        <td class="ps-4 text-muted small">{{ forloop.counter }}</td>
+                        <td>
+                            <strong class="text-dark">{{ p.name }}</strong>
+                        </td>
+                        <td><span class="badge bg-slate-100 text-dark border">{{ p.roll_number }}</span></td>
+                        <td class="text-muted small">{{ p.email }}</td>
+                        <td>
+                            {% if p.attended %}
+                                <span class="badge-status attended">
+                                    <i class="bi bi-check-circle-fill"></i> Attended
+                                </span>
+                            {% else %}
+                                <span class="badge-status pending">
+                                    <i class="bi bi-circle"></i> Not Attended
+                                </span>
+                            {% endif %}
+                        </td>
+                        <td class="small text-muted">
+                            {% if p.attended and p.checked_in_at %}
+                                <i class="bi bi-clock me-1"></i>{{ p.checked_in_at|date:"M d, Y @ h:i A" }}
+                            {% else %}
+                                &mdash;
+                            {% endif %}
+                        </td>
+                        <td class="pe-4 text-end">
+                            <a href="{% url 'qr_detail' qr_token=p.qr_token %}" class="btn btn-sm btn-outline-secondary rounded-pill" title="View QR Ticket">
+                                <i class="bi bi-qr-code"></i> View Pass
+                            </a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="7" class="text-center py-5 text-muted">
+                            <i class="bi bi-inbox fs-1 d-block mb-2 text-secondary"></i>
+                            No participants found matching your criteria.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
