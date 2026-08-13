@@ -195,19 +195,19 @@ document.addEventListener('DOMContentLoaded', () => {
       resultCard.classList.add('success');
       resultCard.innerHTML = `
         <div class="d-flex align-items-center gap-3">
-          <div class="bg-success text-white rounded-circle d-flex align-items-center justify-content-center p-3 fs-3" style="width:56px; height:56px;">
-            <i class="bi bi-check-lg"></i>
+          <div class="bg-emerald-600 text-white rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style="width:44px; height:44px; background-color: var(--status-success-text);">
+            <i class="bi bi-check-lg fs-4"></i>
           </div>
           <div class="flex-grow-1">
-            <h5 class="fw-bold text-success mb-0"><i class="bi bi-check-circle-fill me-1"></i> Check-in Successful</h5>
-            <div class="mt-2 fs-5 fw-bold text-dark">${escapeHtml(data.participant.name)}</div>
-            <div class="text-muted small">Roll No: <strong>${escapeHtml(data.participant.roll_number)}</strong> &bull; ${escapeHtml(data.participant.email)}</div>
-            <div class="mt-1 extra-small text-secondary"><i class="bi bi-clock me-1"></i>Checked in at ${escapeHtml(data.checked_in_at)}</div>
+            <h6 class="fw-bold text-success mb-0"><i class="bi bi-check-circle-fill me-1"></i> Check-in Verified</h6>
+            <div class="mt-1 fs-6 fw-bold text-slate-900">${escapeHtml(data.participant.name)}</div>
+            <div class="text-slate-600 small">ID: <strong>${escapeHtml(data.participant.roll_number)}</strong> &bull; ${escapeHtml(data.participant.email)}</div>
+            <div class="mt-1 extra-small text-slate-500"><i class="bi bi-clock me-1"></i>Checked in at ${escapeHtml(data.checked_in_at)}</div>
           </div>
         </div>
         <div class="mt-3 text-end">
-          <button id="resumeScanBtn" class="btn btn-success btn-sm px-4 rounded-pill fw-bold">
-            <i class="bi bi-arrow-repeat me-1"></i> Scan Next Participant
+          <button id="resumeScanBtn" class="btn btn-outline-custom btn-sm px-3 fw-semibold">
+            <i class="bi bi-arrow-repeat me-1"></i> Scan Next Attendee
           </button>
         </div>
       `;
@@ -216,20 +216,20 @@ document.addEventListener('DOMContentLoaded', () => {
       resultCard.classList.add('warning');
       resultCard.innerHTML = `
         <div class="d-flex align-items-center gap-3">
-          <div class="bg-warning text-dark rounded-circle d-flex align-items-center justify-content-center p-3 fs-3" style="width:56px; height:56px;">
-            <i class="bi bi-exclamation-lg"></i>
+          <div class="bg-amber-600 text-white rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style="width:44px; height:44px; background-color: var(--status-warning-text);">
+            <i class="bi bi-exclamation-lg fs-4"></i>
           </div>
           <div class="flex-grow-1">
-            <h5 class="fw-bold text-warning-emphasis mb-0"><i class="bi bi-exclamation-triangle-fill me-1"></i> Already Checked In</h5>
+            <h6 class="fw-bold text-warning-emphasis mb-0"><i class="bi bi-exclamation-triangle-fill me-1"></i> Already Checked In</h6>
             ${data.participant ? `
-              <div class="mt-2 fs-5 fw-bold text-dark">${escapeHtml(data.participant.name)}</div>
-              <div class="text-muted small">Roll No: <strong>${escapeHtml(data.participant.roll_number)}</strong></div>
-              <div class="mt-1 extra-small text-secondary"><i class="bi bi-clock me-1"></i>Previously checked in: ${escapeHtml(data.checked_in_at)}</div>
-            ` : `<div class="text-muted mt-1">${escapeHtml(data.message)}</div>`}
+              <div class="mt-1 fs-6 fw-bold text-slate-900">${escapeHtml(data.participant.name)}</div>
+              <div class="text-slate-600 small">ID: <strong>${escapeHtml(data.participant.roll_number)}</strong></div>
+              <div class="mt-1 extra-small text-slate-500"><i class="bi bi-clock me-1"></i>Checked in earlier: ${escapeHtml(data.checked_in_at)}</div>
+            ` : `<div class="text-slate-600 mt-1 small">${escapeHtml(data.message)}</div>`}
           </div>
         </div>
         <div class="mt-3 text-end">
-          <button id="resumeScanBtn" class="btn btn-warning btn-sm px-4 rounded-pill fw-bold text-dark">
+          <button id="resumeScanBtn" class="btn btn-outline-custom btn-sm px-3 fw-semibold">
             <i class="bi bi-arrow-repeat me-1"></i> Continue Scanning
           </button>
         </div>
@@ -239,16 +239,16 @@ document.addEventListener('DOMContentLoaded', () => {
       resultCard.classList.add('danger');
       resultCard.innerHTML = `
         <div class="d-flex align-items-center gap-3">
-          <div class="bg-danger text-white rounded-circle d-flex align-items-center justify-content-center p-3 fs-3" style="width:56px; height:56px;">
-            <i class="bi bi-x-lg"></i>
+          <div class="bg-rose-600 text-white rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style="width:44px; height:44px; background-color: var(--status-danger-text);">
+            <i class="bi bi-x-lg fs-4"></i>
           </div>
           <div class="flex-grow-1">
-            <h5 class="fw-bold text-danger mb-0"><i class="bi bi-x-circle-fill me-1"></i> Invalid QR Code</h5>
-            <div class="text-secondary small mt-1">${escapeHtml(data.message)}</div>
+            <h6 class="fw-bold text-danger mb-0"><i class="bi bi-x-circle-fill me-1"></i> Invalid Ticket Pass</h6>
+            <div class="text-slate-600 small mt-1">${escapeHtml(data.message)}</div>
           </div>
         </div>
         <div class="mt-3 text-end">
-          <button id="resumeScanBtn" class="btn btn-danger btn-sm px-4 rounded-pill fw-bold">
+          <button id="resumeScanBtn" class="btn btn-outline-custom btn-sm px-3 fw-semibold">
             <i class="bi bi-arrow-repeat me-1"></i> Try Again
           </button>
         </div>
@@ -313,9 +313,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   soundToggleBtn?.addEventListener('click', () => {
     soundEnabled = !soundEnabled;
-    soundToggleBtn.classList.toggle('btn-success', soundEnabled);
-    soundToggleBtn.classList.toggle('btn-secondary', !soundEnabled);
-    soundToggleBtn.innerHTML = soundEnabled ? '<i class="bi bi-volume-up-fill"></i> Sound ON' : '<i class="bi bi-volume-mute-fill"></i> Sound OFF';
+    soundToggleBtn.classList.toggle('btn-outline-custom', soundEnabled);
+    soundToggleBtn.classList.toggle('btn-outline-secondary', !soundEnabled);
+    soundToggleBtn.innerHTML = soundEnabled ? '<i class="bi bi-volume-up-fill me-1"></i> Sound ON' : '<i class="bi bi-volume-mute-fill me-1"></i> Sound OFF';
   });
 
   manualTokenForm?.addEventListener('submit', (e) => {

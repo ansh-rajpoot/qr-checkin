@@ -1,42 +1,31 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %} QR Check-In Scanner {% endblock %}
+{% block title %} Gate Check-In Scanner - Event System {% endblock %}
 
 {% block content %}
-<div class="page-banner py-4">
+<div class="page-header">
     <div class="container text-center">
-        <h1 class="h2 mb-1"><i class="bi bi-camera-fill me-2 text-info"></i>Gate Check-In Scanner</h1>
-        <p class="small text-light-50 mb-0">Point device camera at attendee's QR ticket pass for instant verification.
-        </p>
+        <h1 class="h2 mb-1">Gate Check-In Scanner</h1>
+        <p>Point device camera at attendee's QR ticket pass for immediate check-in verification.</p>
     </div>
 </div>
 
 <div class="container main-content">
     <div class="row justify-content-center">
-        <div class="col-md-8 col-lg-6">
+        <div class="col-md-8 col-lg-5">
             <div class="custom-card p-3 p-md-4">
 
-                <!-- Header Badge -->
-                <div class="text-center mb-3">
-                    <span
-                        class="badge bg-primary-subtle text-primary px-3 py-1.5 rounded-pill uppercase fw-bold font-monospace"
-                        style="letter-spacing: 1px;">
-                        &bull; QR CHECK-IN CAMERA STREAM &bull;
-                    </span>
-                </div>
-
                 <!-- Controls Toolbar -->
-                <div class="d-flex align-items-center justify-content-between gap-2 mb-3 bg-light p-2 rounded-3 border">
+                <div class="d-flex align-items-center justify-content-between gap-2 mb-3 bg-slate-50 p-2 rounded-3 border">
                     <div class="flex-grow-1">
-                        <select id="cameraSelect" class="form-select form-select-sm border-secondary-subtle">
+                        <select id="cameraSelect" class="form-select form-select-sm">
                             <option value="">Detecting camera devices...</option>
                         </select>
                     </div>
                     <div>
-                        <button id="soundToggleBtn" class="btn btn-success btn-sm rounded-pill px-3"
-                            title="Toggle audio chime">
-                            <i class="bi bi-volume-up-fill"></i> Sound ON
+                        <button id="soundToggleBtn" class="btn btn-outline-custom btn-sm" title="Toggle audio chime">
+                            <i class="bi bi-volume-up-fill me-1"></i> Sound ON
                         </button>
                     </div>
                 </div>
@@ -49,27 +38,27 @@
                     </div>
                     <div id="scannerPlaceholder"
                         class="position-absolute top-0 start-0 w-100 h-100 d-flex flex-column align-items-center justify-content-center text-white p-4">
-                        <div class="spinner-border text-info mb-3" role="status"></div>
+                        <div class="spinner-border text-light mb-3" role="status"></div>
                         <p class="mb-0 fw-semibold text-center">Initializing Camera Stream...</p>
-                        <small class="text-muted text-center mt-1">Please allow camera permissions if prompted.</small>
+                        <small class="text-slate-400 text-center mt-1">Please grant camera permission if prompted.</small>
                     </div>
                 </div>
 
                 <!-- Action Controls -->
-                <div class="d-flex justify-content-between align-items-center mb-3">
+                <div class="d-flex justify-content-between align-items-center mb-2">
                     <button id="startScanBtn" class="btn btn-primary-custom btn-sm px-3 d-none">
                         <i class="bi bi-play-fill me-1"></i> Start Camera
                     </button>
-                    <button id="stopScanBtn" class="btn btn-outline-danger btn-sm px-3 rounded-pill">
-                        <i class="bi bi-stop-fill me-1"></i> Pause Stream
+                    <button id="stopScanBtn" class="btn btn-outline-danger btn-sm px-3">
+                        <i class="bi bi-pause-fill me-1"></i> Pause Camera
                     </button>
-                    <button class="btn btn-link btn-sm text-decoration-none text-muted" data-bs-toggle="modal"
+                    <button class="btn btn-link btn-sm text-decoration-none text-slate-600" data-bs-toggle="modal"
                         data-bs-target="#manualTokenModal">
                         <i class="bi bi-keyboard me-1"></i> Manual Token Input
                     </button>
                 </div>
 
-                <!-- Scan Result Display Card -->
+                <!-- Scan Result Feedback Card -->
                 <div id="resultCard" class="scan-result-card d-none"></div>
 
             </div>
@@ -82,22 +71,22 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content rounded-4 border-0 shadow-lg">
             <div class="modal-header border-bottom-0 pb-0">
-                <h5 class="modal-title fw-bold" id="manualTokenModalLabel"><i
-                        class="bi bi-keyboard me-2 text-primary"></i>Manual Check-In Token</h5>
+                <h5 class="modal-title fw-bold" id="manualTokenModalLabel">
+                    <i class="bi bi-keyboard me-2 text-slate-700"></i>Manual Check-In Token
+                </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form id="manualTokenForm">
                 <div class="modal-body py-3">
-                    <p class="text-muted small">If an attendee's phone screen is cracked or camera is unable to scan,
-                        paste or type their unique QR token string or URL below:</p>
+                    <p class="text-slate-600 small">If an attendee's phone screen cannot be scanned by camera, enter their ticket QR token string below:</p>
                     <div class="mb-3">
-                        <label for="manualTokenInput" class="form-label">Participant QR Token / UUID</label>
+                        <label for="manualTokenInput" class="form-label">Participant QR Token</label>
                         <input type="text" class="form-control font-monospace" id="manualTokenInput"
                             placeholder="e.g. c7a31b4e-9d22-488f-a32e-18d2d9b62c45" required>
                     </div>
                 </div>
                 <div class="modal-footer border-top-0 pt-0">
-                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-outline-custom" data-bs-dismiss="modal">Cancel</button>
                     <button type="submit" class="btn btn-primary-custom">Verify Participant</button>
                 </div>
             </form>

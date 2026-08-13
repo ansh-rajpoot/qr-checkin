@@ -4,11 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}QR Event Check-In System{% endblock %}</title>
-    <!-- Google Fonts -->
+    <title>{% block title %}Event Check-In Pass{% endblock %}</title>
+    <!-- Google Fonts: Plus Jakarta Sans -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Bootstrap Icons -->
@@ -19,12 +19,15 @@
 </head>
 <body>
 
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark navbar-custom sticky-top">
+    <!-- Header Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-custom sticky-top">
         <div class="container">
             <a class="navbar-brand" href="{% url 'register' %}">
-                <i class="bi bi-qr-code-scan text-info me-1"></i> TechPass
-                <span class="badge-tag">QR Check-In</span>
+                <div class="brand-icon-box">
+                    <i class="bi bi-qr-code"></i>
+                </div>
+                <span>CheckIn Pass</span>
+                <span class="brand-tag d-none d-sm-inline-block">Event System</span>
             </a>
             <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
@@ -33,28 +36,28 @@
                 <ul class="navbar-nav ms-auto align-items-center gap-1">
                     <li class="nav-item">
                         <a class="nav-link {% if request.resolver_match.url_name == 'register' %}active{% endif %}" href="{% url 'register' %}">
-                            <i class="bi bi-person-plus me-1"></i> Register
+                            <i class="bi bi-ticket-perforated me-1"></i> Get Ticket Pass
                         </a>
                     </li>
                     {% if user.is_authenticated and user.is_staff %}
                     <li class="nav-item">
                         <a class="nav-link {% if request.resolver_match.url_name == 'scanner_page' %}active{% endif %}" href="{% url 'scanner_page' %}">
-                            <i class="bi bi-camera-fill me-1"></i> Scanner
+                            <i class="bi bi-camera me-1"></i> Gate Scanner
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}" href="{% url 'dashboard' %}">
-                            <i class="bi bi-speedometer2 me-1"></i> Dashboard
+                            <i class="bi bi-grid-1x2 me-1"></i> Dashboard
                         </a>
                     </li>
-                    <li class="nav-item ms-lg-2">
-                        <span class="text-light small me-2 d-none d-lg-inline"><i class="bi bi-person-circle me-1"></i>{{ user.username }}</span>
-                        <a class="btn btn-outline-light btn-sm rounded-pill px-3" href="{% url 'logout' %}">Logout</a>
+                    <li class="nav-item ms-lg-3 d-flex align-items-center gap-2">
+                        <span class="badge bg-slate-100 text-slate-700 font-semibold px-2.5 py-1.5 border border-slate-200"><i class="bi bi-person-circle me-1"></i>{{ user.username }}</span>
+                        <a class="btn btn-outline-custom btn-sm px-3" href="{% url 'logout' %}">Sign Out</a>
                     </li>
                     {% else %}
                     <li class="nav-item ms-lg-2">
-                        <a class="btn btn-primary-custom btn-sm text-white px-3" href="{% url 'login' %}">
-                            <i class="bi bi-shield-lock me-1"></i> Staff Login
+                        <a class="btn btn-primary-custom btn-sm px-3" href="{% url 'login' %}">
+                            <i class="bi bi-lock me-1"></i> Staff Login
                         </a>
                     </li>
                     {% endif %}
@@ -63,28 +66,28 @@
         </div>
     </nav>
 
-    <!-- Flash Messages -->
+    <!-- Global System Messages -->
+    {% if messages %}
     <div class="container mt-3">
-        {% if messages %}
-            {% for message in messages %}
-                <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show rounded-3 shadow-sm" role="alert">
-                    <i class="bi {% if message.tags == 'error' %}bi-exclamation-triangle-fill{% elif message.tags == 'success' %}bi-check-circle-fill{% else %}bi-info-circle-fill{% endif %} me-2"></i>
-                    {{ message }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            {% endfor %}
-        {% endif %}
+        {% for message in messages %}
+            <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show rounded-3 shadow-xs border" role="alert">
+                <i class="bi {% if message.tags == 'error' %}bi-exclamation-circle{% elif message.tags == 'success' %}bi-check-circle{% else %}bi-info-circle{% endif %} me-2"></i>
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
     </div>
+    {% endif %}
 
-    <!-- Main Content -->
+    <!-- Page Body Content -->
     {% block content %}
     {% endblock %}
 
     <!-- Footer -->
     <footer>
         <div class="container">
-            <p class="mb-0">
-                &copy; 2026 <strong>TechPass QR Check-In System</strong> &bull; Built with Django & WebRTC Camera API
+            <p class="mb-0 text-slate-500">
+                &copy; 2026 <strong>Event Check-In Pass System</strong> &bull; Gate Pass Management & Verification
             </p>
         </div>
     </footer>
