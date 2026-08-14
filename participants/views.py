@@ -34,8 +34,12 @@ def register_participant(request):
 def participant_qr_detail(request, qr_token):
     """
     Participant view page to display and download their assigned QR code.
+    Ensures QR code image exists on storage.
     """
     participant = get_object_or_404(Participant, qr_token=qr_token)
+    if not participant.qr_code_image or not participant.qr_code_image.storage.exists(participant.qr_code_image.name):
+        participant.generate_qr_code()
+        participant.save()
     return render(request, 'participants/qr_detail.html', {
         'participant': participant
     })

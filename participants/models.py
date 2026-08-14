@@ -1,4 +1,5 @@
 import uuid
+import re
 import qrcode
 from io import BytesIO
 from django.db import models
@@ -25,8 +26,8 @@ class Participant(models.Model):
         if not self.qr_token:
             self.qr_token = uuid.uuid4()
 
-        # Automatically generate QR Code image if not present
-        if not self.qr_code_image:
+        # Automatically generate QR Code image if not present or missing from storage
+        if not self.qr_code_image or not self.qr_code_image.storage.exists(self.qr_code_image.name):
             self.generate_qr_code()
 
         super().save(*args, **kwargs)
@@ -49,5 +50,7 @@ class Participant(models.Model):
         img = qr.make_image(fill_color="#0f172a", back_color="#ffffff")
         buffer = BytesIO()
         img.save(buffer, format='PNG')
-        filename = f"qr_{self.roll_number}_{self.qr_token.hex[:8]}.png"
+        safe_roll = re.sub(r'[^a-zA-Z0-9_-]', '_', str(self.roll_number))
+        filename = f"qr_{safe_roll}_{self.qr_token.hex[:8]}.png"
         self.qr_code_image.save(filename, ContentFile(buffer.getvalue()), save=False)
+
